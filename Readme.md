@@ -13,4 +13,4 @@ Auto-Generator-Test is an automated tool for generating and running unit and end
 1. Clone the project:
 
 ```bash
-git clone https://github.com/yourusername/auto-generator-test.git
+git clone https://github.com/ZaraSdt7/Auto-generator-test
