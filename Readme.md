@@ -35,6 +35,28 @@ console.log(content);
 ```
 
 
+## DTOs
+
+### ScannerDTO
+
+The `ScannerDTO` is used to represent data for scanning files.
+
+#### Properties:
+
+- `filePath`: The path of the file to be scanned.
+- `scanType`: The type of scan (e.g., syntax check, file existence, etc.).
+- `options`: Optional configurations for the scan.
+
+#### Example Usage:
+
+```typescript
+import { ScannerDTO } from 'auto-generator-test/dto/scanner.dto';
+
+const scannerRequest = new ScannerDTO('path/to/file.ts', 'syntax-check');
+console.log(scannerRequest.filePath);  // path/to/file.ts
+console.log(scannerRequest.scanType);  // syntax-check
+```
+
 
 
 
