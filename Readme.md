@@ -32,7 +32,7 @@ import { FileReader } from 'auto-generator-test/utils/file-reader';
 
 const content = FileReader.readFileContent('path/to/your/file.ts');
 console.log(content);
-
+```
 
 
 
