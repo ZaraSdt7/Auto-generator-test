@@ -19,6 +19,25 @@ Before you begin, ensure you have met the following requirements:
 - **Jest** (for testing)
 - **npm** or **yarn** (for managing dependencies)
 
+## Utility Functions
+
+The following utility functions are provided in `utils/file-reader.ts` for interacting with files in your project:
+
+### 1. Read File Content
+
+Reads the content of a text file.
+
+```typescript
+import { FileReader } from 'auto-generator-test/utils/file-reader';
+
+const content = FileReader.readFileContent('path/to/your/file.ts');
+console.log(content);
+
+
+
+
+
+
 ## Installation
 
 To install the project, follow these steps:
@@ -54,7 +73,8 @@ npm install auto-test-generator
 
 4. Import the module and configure:
 After installation, import the AutoTestGeneratorModule into your NestJS application.
-```
+
+```typescript
 import { AutoTestGeneratorModule } from 'auto-test-generator';
 
 @Module({
@@ -68,7 +88,7 @@ To automatically generate tests for your services and modules, you can call the 
 
 For example:
 
-```
+```typescript
 import { AutoTestGeneratorService } from 'auto-test-generator';
 
 @Injectable()
