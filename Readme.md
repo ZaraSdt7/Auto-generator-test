@@ -116,6 +116,69 @@ Using npm:
 npm install auto-test-generator
 ```
 
+Usage
+
+Run the CLI tool with the following command:
+
+```bash
+nest-auto-test-generator generate --controllers --services
+```
+Options:
+
+🔋 --controllers: Generate tests for controllers.
+
+🔋 --services: Generate tests for services.
+
+
+Example Project
+
+This package includes a simple example to demonstrate how it works.
+
+Sample Controller
+
+```typescript
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { SampleService } from './sample.service';
+
+@Controller('sample')
+export class SampleController {
+  constructor(private readonly sampleService: SampleService) {}
+
+  @Get('/')
+  getData() {
+    return this.sampleService.getData();
+  }
+
+  @Post()
+  createData(@Body() data: any) {
+    return { ...data, message: "Sample data successfully created" };
+  }
+}
+```
+
+Sample Service
+
+```typescript
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class SampleService {
+  private data: any[] = [];
+
+  getData() {
+    return this.data;
+  }
+
+  createData(data: any) {
+    this.data.push(data);
+    return data;
+  }
+}
+```
+
+
+
+
 4. Import the module and configure:
 After installation, import the AutoTestGeneratorModule into your NestJS application.
 

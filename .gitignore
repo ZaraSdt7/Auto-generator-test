@@ -2,7 +2,8 @@
 
 /node_modules
 /coverage
-/test/coverage
+/test
+/coverage
 /dist
 
 npm-debug.log
