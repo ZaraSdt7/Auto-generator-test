@@ -80,10 +80,6 @@ console.log(files);  // Array of file names
 
 
 
-
-
-
-
 ## Installation
 
 To install the project, follow these steps:
