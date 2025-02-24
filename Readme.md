@@ -54,14 +54,14 @@ npm install auto-test-generator
 
 4. Import the module and configure:
 After installation, import the AutoTestGeneratorModule into your NestJS application.
-
+```
 import { AutoTestGeneratorModule } from 'auto-test-generator';
 
 @Module({
   imports: [AutoTestGeneratorModule],
 })
 export class AppModule {}
-
+```
 
 5. Generate Tests:
 To automatically generate tests for your services and modules, you can call the relevant service from AutoTestGeneratorService in your project.
