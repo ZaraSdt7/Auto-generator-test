@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { glob } from "glob";
+import { ScannerDTO } from "./dto.scanner";
 
 export function scanService() {
     const files = glob.sync("**/*.service.ts", { ignore: "node_modules/**" });

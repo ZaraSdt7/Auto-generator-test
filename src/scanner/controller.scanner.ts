@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { glob } from "glob";
 
+
 export function scanController() 
 {
     

@@ -2,6 +2,8 @@ import { Command } from "commander";
 import { scanController } from './scanner/controller.scanner';
 import { generateTestsCotroller, generateTestsService } from './generator/test.generator';
 import { scanService } from "./scanner/service.scanner";
+import { ScannerDTO } from "./scanner/dto.scanner";
+
 
 const program = new Command();
 
@@ -13,6 +15,8 @@ program
     .option("--services", "Generate tests for services")
     .action((options) => {
 
+        new ScannerDTO('',options.controllers ? "controllers" : "services");
+        
         if (options.controllers) {
             scanController();
         }
