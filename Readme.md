@@ -57,6 +57,30 @@ console.log(scannerRequest.filePath);  // path/to/file.ts
 console.log(scannerRequest.scanType);  // syntax-check
 ```
 
+2. Check If File Exists
+Checks whether a file or directory exists.
+
+```typescript
+import { FileReader } from 'auto-generator-test/utils/file-reader';
+
+const exists = FileReader.checkIfFileExists('path/to/your/file.ts');
+console.log(exists);  // true or false
+```
+
+3. Get Files in Directory
+Returns a list of files in a given directory.
+
+```typescript
+import { FileReader } from 'auto-generator-test/utils/file-reader';
+
+const files = FileReader.getFilesInDirectory('path/to/your/directory');
+console.log(files);  // Array of file names
+```
+
+
+
+
+
 
 
 
