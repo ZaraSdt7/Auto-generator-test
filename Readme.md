@@ -95,3 +95,10 @@ Using yarn:
 yarn test
 ```
 
+7. Optional: Configure Jest
+Make sure you have Jest configured properly in your project for running unit tests. You can customize the Jest setup in your jest.config.js file, including adding paths and test environments if necessary.
+
+Usage
+- Automatic Test Generation: This tool will automatically generate unit tests for your services and modules based on their structure.
+- Customization: You can customize the generated tests by modifying the templates or adjusting settings in the configuration file.
+- E2E Test Generation: This tool also supports generating boilerplate end-to-end tests.
