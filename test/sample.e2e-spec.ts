@@ -1,8 +1,9 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from '@nestjs/testing';
 import  request from 'supertest';
-import { TestModule } from '../test.module';
-import { SampleService } from "../sample.service";
+import { TestModule } from './test.module';
+import { SampleService } from './sample.service';
+
 
 describe('📌 E2E Tests: SampleController with Mocking', () => {
     let app: INestApplication;

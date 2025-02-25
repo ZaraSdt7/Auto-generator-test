@@ -5,6 +5,7 @@
 /test
 /coverage
 /dist
+/tests
 
 npm-debug.log
 yarn-debug.log
