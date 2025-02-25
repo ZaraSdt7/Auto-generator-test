@@ -2,6 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "baseUrl": "./src",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "resolveJsonModule": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -9,7 +14,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noEmit": true
+    "noEmit": false,
   },
   "include": ["src/**/*.ts", "test/**/*.ts"]
 }
