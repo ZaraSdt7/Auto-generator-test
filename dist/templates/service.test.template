@@ -1,0 +1,19 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { <%= serviceName %> } from '../<%= filePath %>';
+
+describe('<%= serviceName %>', () => {
+  let service: <%= serviceName %>;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        <%= serviceName %>,
+       // <%= mockProviders  %>
+      ],
+    }).compile();
+
+    service = module.get<<%= serviceName %>>(<%= serviceName %>);
+  });
+
+  // <%= testCases %>
+});
