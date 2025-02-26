@@ -2,12 +2,12 @@
   "name": "auto-generator-test",
   "version": "1.1.0",
   "bin": {
-      "auto-generator-test": "./dist/cli.js"
+    "auto-generator-test": "./dist/cli.js"
   },
   "description": "A CLI tool for auto-generating NestJS test files",
   "main": "./dist/scli.js",
-   "types": "./dist/cli.d.ts",
-   "exports": {
+  "types": "./dist/cli.d.ts",
+  "exports": {
     "require": "./dist/cli.js",
     "types": "./dist/cli.d.ts"
   },
@@ -26,6 +26,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.5",
     "@types/supertest": "^6.0.2",
+    "fs-extra": "^11.3.0",
     "jest": "^29.7.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.6",
@@ -37,9 +38,9 @@
     "@nestjs/core": "^11.0.10",
     "@nestjs/platform-express": "^11.0.10",
     "commander": "^13.1.0",
-    "fs-extra": "^11.3.0",
     "glob": "^11.0.1"
   },
-  "files": ["dist"]
-
+  "files": [
+    "dist"
+  ]
 }

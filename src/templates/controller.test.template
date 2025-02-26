@@ -1,20 +1,47 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { <%= controllerName %> } from '../<%= filePath %>';
-import { HttpStatus } from '@nestjs/common';
+import { <%= controllerName %> } from '<%= controllerPath %>';
+import { <%= serviceName %> } from '<%= servicePath %>';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-describe('<%= controllerName %>', () => {
+// Mock Service
+const mock<%= serviceName %> = {
+  <%= mockMethods %>
+};
+
+describe('<%= controllerName %> Controller', () => {
   let controller: <%= controllerName %>;
+  let service: <%= serviceName %>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [<%= controllerName %>],
       providers: [
-        // <%= mockService %>
+        {
+          provide: <%= serviceName %>,
+          useValue: mock<%= serviceName %>,
+        },
       ],
     }).compile();
 
     controller = module.get<<%= controllerName %>>(<%= controllerName %>);
+    service = module.get<<%= serviceName %>>(<%= serviceName %>);
   });
 
-  // <%= testCases %>
+  describe('Controller Methods', () => {
+    <%= testCases %>  
+  });
+
+  describe('Error Handling', () => {
+    it('should throw an error if a service method fails', async () => {
+      jest.spyOn(service, '<%= errorMethod %>').mockRejectedValue(new HttpException('Error', HttpStatus.BAD_REQUEST));
+
+      try {
+        await controller.<%= errorMethod %>();
+      } catch (e) {
+        expect(e).toBeInstanceOf(HttpException);
+        expect(e.response.message).toEqual('Error');
+        expect(e.status).toEqual(HttpStatus.BAD_REQUEST);
+      }
+    });
+  });
 });
