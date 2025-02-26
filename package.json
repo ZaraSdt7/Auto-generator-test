@@ -1,6 +1,9 @@
 {
   "name": "auto-generator-test",
   "version": "1.0.3",
+  "bin": {
+    "auto-generator-test": "./src/cli.ts"
+  },
   "description": "A CLI tool for auto-generating NestJS test files",
   "main": "./dist/scli.js",
    "types": "./dist/cli.d.ts",
