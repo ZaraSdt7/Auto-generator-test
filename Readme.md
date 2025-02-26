@@ -121,7 +121,7 @@ Usage
 Run the CLI tool with the following command:
 
 ```bash
-nest-auto-test-generator generate --controllers --services
+npx auto-generator-test generate  --controllers --services
 ```
 Options:
 

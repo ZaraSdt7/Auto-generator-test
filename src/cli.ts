@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { scanController } from './scanner/controller.scanner';
-import { generateTestsCotroller, generateTestsService } from './generator/test.generator';
-import { scanService } from "./scanner/service.scanner";
-import { ScannerDTO } from "./scanner/dto.scanner";
-
+import {
+    generateTestsCotroller,
+    generateTestsService,
+} from "./generator/test.generator";
 
 const program = new Command();
 
@@ -16,19 +15,12 @@ program
     .option("--controllers", "Generate tests for controllers")
     .option("--services", "Generate tests for services")
     .action((options) => {
-
-        new ScannerDTO('',options.controllers ? "controllers" : "services");
-        
         if (options.controllers) {
-            scanController();
+            generateTestsCotroller();
         }
         if (options.services) {
-            scanService();
+            generateTestsService();
         }
-        generateTestsCotroller();
-        generateTestsService();
-       
-     
     });
 
 program.parse(process.argv);
