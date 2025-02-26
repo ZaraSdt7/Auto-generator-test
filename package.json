@@ -1,11 +1,15 @@
 {
   "name": "auto-generator-test",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A CLI tool for auto-generating NestJS test files",
-  "main": "dist/src/cli.js",
+  "main": "./dist/scli.js",
+   "types": "./dist/cli.d.ts",
+   "exports": {
+    "require": "./dist/cli.js",
+    "types": "./dist/cli.d.ts"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "npm run test",
     "test": "jest",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
