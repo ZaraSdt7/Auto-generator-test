@@ -5,6 +5,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": "./src",
     "declaration": true, 
     "sourceMap": true,
     "resolveJsonModule": true,

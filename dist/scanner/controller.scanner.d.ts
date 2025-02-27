@@ -6,4 +6,5 @@ export declare function scanController(): {
         route: string;
         functionName: string;
     }[];
+    serviceName: string | null;
 }[];

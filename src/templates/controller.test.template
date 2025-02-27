@@ -1,46 +1,42 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { <%= controllerName %> } from '<%= controllerPath %>';
-import { <%= serviceName %> } from '<%= servicePath %>';
+import { <%= className %> } from '../src/modules/<%= moduleName %>/<%= fileName %>';
+import { <%= serviceName %> } from '../src/modules/<%= moduleName %>/<%= serviceFileName %>';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-// Mock Service
+// Mock Providers
 const mock<%= serviceName %> = {
-  <%= mockMethods %>
+  provide: <%= serviceName %>,
+  useValue: {
+    <%= serviceMethod %>: jest.fn(),
+  },
 };
 
-describe('<%= controllerName %> Controller', () => {
-  let controller: <%= controllerName %>;
-  let service: <%= serviceName %>;
+describe('<%= className %> Controller', () => {
+  let controller: <%= className %>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [<%= controllerName %>],
-      providers: [
-        {
-          provide: <%= serviceName %>,
-          useValue: mock<%= serviceName %>,
-        },
-      ],
+      controllers: [<%= className %>],
+      providers: [mock<%= serviceName %>],
     }).compile();
 
-    controller = module.get<<%= controllerName %>>(<%= controllerName %>);
-    service = module.get<<%= serviceName %>>(<%= serviceName %>);
+    controller = module.get<<%= className %>>(<%= className %>);
   });
 
   describe('Controller Methods', () => {
-    <%= testCases %>  
+    <%= testCases %>
   });
 
   describe('Error Handling', () => {
-    it('should throw an error if a service method fails', async () => {
-      jest.spyOn(service, '<%= errorMethod %>').mockRejectedValue(new HttpException('Error', HttpStatus.BAD_REQUEST));
+    it('should throw an error if dependency fails', async () => {
+      jest.spyOn(mock<%= serviceName %>.useValue, 'getData').mockRejectedValue(new HttpException('Dependency Error', HttpStatus.INTERNAL_SERVER_ERROR));
 
       try {
-        await controller.<%= errorMethod %>();
+        await controller.<%= serviceMethod %>();
       } catch (e) {
         expect(e).toBeInstanceOf(HttpException);
-        expect(e.response.message).toEqual('Error');
-        expect(e.status).toEqual(HttpStatus.BAD_REQUEST);
+        expect(e.response.message).toEqual('Dependency Error');
+        expect(e.status).toEqual(HttpStatus.INTERNAL_SERVER_ERROR);
       }
     });
   });

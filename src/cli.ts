@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import {
-    generateTestsCotroller,
-    generateTestsService,
-} from "./generator/test.generator";
+import { generateTestsCotroller } from "./generator/test.controller.generate";
+import { generateTestsService } from "./generator/test.service.generator";
+
 
 const program = new Command();
 
