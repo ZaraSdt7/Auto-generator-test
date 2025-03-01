@@ -113,7 +113,7 @@ To use the Auto Generator Test in your NestJS project, install it via npm or yar
 Using npm:
 
 ```bash
-npm install auto-test-generator
+npm install auto-generator-test
 ```
 
 Usage
