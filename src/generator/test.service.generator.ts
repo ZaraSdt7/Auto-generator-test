@@ -62,7 +62,7 @@ export function generateTestsService() {
 
     const failingMethod = methods.length ? methods[0] : 'execute';
     
-    let failingMethodParams = '{}';
+    let failingMethodParams = '';
     if (failingMethod.includes('find') || failingMethod.includes('get') || failingMethod.includes('read')) {
       failingMethodParams = '{ id: "test-id" }';
     } else if (failingMethod.includes('create') || failingMethod.includes('update') || failingMethod.includes('save')) {

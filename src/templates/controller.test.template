@@ -29,7 +29,7 @@ describe('<%= className %> Controller', () => {
 
   describe('Error Handling', () => {
     it('should throw an error if dependency fails', async () => {
-      jest.spyOn(mock<%= serviceName %>.useValue, 'getData').mockRejectedValue(new HttpException('Dependency Error', HttpStatus.INTERNAL_SERVER_ERROR));
+      jest.spyOn(mock<%= serviceName %>.useValue, '<%= serviceMethod %>').mockRejectedValue(new HttpException('Dependency Error', HttpStatus.INTERNAL_SERVER_ERROR));
 
       try {
         await controller.<%= serviceMethod %>();

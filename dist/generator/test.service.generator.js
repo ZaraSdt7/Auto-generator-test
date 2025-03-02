@@ -85,7 +85,7 @@ function generateTestsService() {
         })
             .join('\n');
         const failingMethod = methods.length ? methods[0] : 'execute';
-        let failingMethodParams = '{}';
+        let failingMethodParams = '';
         if (failingMethod.includes('find') || failingMethod.includes('get') || failingMethod.includes('read')) {
             failingMethodParams = '{ id: "test-id" }';
         }

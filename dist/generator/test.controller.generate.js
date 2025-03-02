@@ -51,19 +51,47 @@ function generateTestsCotroller() {
         const serviceFileName = `${serviceName.replace("Service", "").toLowerCase()}.service`;
         // Create proper import path without double slashes
         const importPath = moduleName
-            ? `../src/${moduleName}`
-            : `./`;
+            ? `../src/${moduleName}`.replace(/\/+/g, '/')
+            : `./`.replace(/\/+/g, '/');
         if (!methods.length) {
             console.warn(`⚠️ No methods found in ${filePath}`);
         }
         const testCases = methods
-            .map(({ functionName }) => `
+            .map(({ functionName, method, route }) => {
+            // Generate appropriate test parameters based on HTTP method and function name
+            let params = '';
+            const lowerName = functionName.toLowerCase();
+            // Determine parameters based on method type and function name
+            if (method === 'Post' || method === 'Put' || method === 'Patch') {
+                params = '{ name: "test", value: "data" }';
+            }
+            else if (method === 'Delete' || lowerName.includes('delete') || lowerName.includes('remove')) {
+                params = '"test-id"';
+            }
+            else if (lowerName.includes('byid') || lowerName.includes('getone') || lowerName.includes('findone')) {
+                params = '"test-id"';
+            }
+            else if (lowerName.includes('search') || lowerName.includes('filter')) {
+                params = '{ query: "test" }';
+            }
+            else if (route && route.includes(':')) {
+                // If route has parameters like /users/:id
+                params = '"test-id"';
+            }
+            return `
     it('should call ${functionName}()', async () => {
-      const result = await controller.${functionName}();
+      const result = await controller.${functionName}(${params});
       expect(result).toBeDefined();
-    });`)
+    });`;
+        })
             .join("\n");
-        const failedMethod = methods.length ? methods[0].functionName : "getData";
+        // Select a suitable method for error testing
+        const methodsForErrorTesting = methods.filter(m => m.method === 'Get' || m.method === 'Post');
+        const failedMethod = methodsForErrorTesting.length
+            ? methodsForErrorTesting[0].functionName
+            : methods.length
+                ? methods[0].functionName
+                : "getData";
         const testFile = template
             .replace(/<%= className %>/g, className)
             .replace(/<%= moduleName %>/g, moduleName)
@@ -72,10 +100,43 @@ function generateTestsCotroller() {
             .replace(/<%= serviceFileName %>/g, serviceFileName)
             .replace(/<%= serviceMethod %>/g, failedMethod)
             .replace(/<%= testCases %>/g, testCases)
-            .replace(/<%= importPath %>/g, importPath);
+            .replace(/<%= importPath %>/g, importPath)
+            .replace(/\/\//g, '/');
         const testFilePath = path.join(process.cwd(), filePath.replace(".ts", ".spec.ts"));
-        (0, fs_1.writeFileSync)(testFilePath, testFile);
-        console.log(`✅ Controller test generated: ${testFilePath}`);
+        try {
+            // Create directory if it doesn't exist
+            const testDir = path.dirname(testFilePath);
+            if (!(0, fs_1.existsSync)(testDir)) {
+                (0, fs_1.mkdirSync)(testDir, { recursive: true });
+            }
+            (0, fs_1.writeFileSync)(testFilePath, testFile);
+            // Check if service file exists and create stub if needed
+            const servicePath = path.join(testDir, serviceFileName + '.ts');
+            if (!(0, fs_1.existsSync)(servicePath)) {
+                console.log(`⚠️ Service file not found, creating stub: ${servicePath}`);
+                // Create stub service file with methods that match controller methods
+                const methodImplementations = methods.map(({ functionName }) => {
+                    return `
+  async ${functionName}(...args: any[]) {
+    return { message: 'Stub service method', methodName: '${functionName}', args };
+  }`;
+                }).join('\n');
+                const stubService = `import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class ${serviceName} {${methodImplementations || `
+  async ${failedMethod}() {
+    return { message: 'Stub service method' };
+  }`}
+}
+`;
+                (0, fs_1.writeFileSync)(servicePath, stubService);
+            }
+            console.log(`✅ Controller test generated: ${testFilePath}`);
+        }
+        catch (error) {
+            console.error(`❌ Error generating test for ${filePath}:`, error);
+        }
     });
 }
 //# sourceMappingURL=test.controller.generate.js.map

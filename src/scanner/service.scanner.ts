@@ -17,8 +17,14 @@ export function scanService() {
     let methodMatch: RegExpExecArray | null;
 
     while ((methodMatch = methodsRegex.exec(content)) !== null) {
-      if (methodMatch[1] !== "constructor" && !methodMatch[1].startsWith("get") && !methodMatch[1].startsWith("set")) {
-        methods.push(methodMatch[1]);
+      const methodName = methodMatch[1];
+      // Skip constructor, getters, setters, and JavaScript reserved words/built-ins
+      const reservedWords = ['constructor', 'catch', 'then', 'finally', 'throw', 'delete', 'return', 'break', 'continue', 'for', 'switch', 
+        'if', 'else', 'case', 'default', 'try', 'new', 'this', 'function', 'async', 'await', 'class', 'extends',
+        'get', 'set', 'toString', 'valueOf', 'apply', 'call', 'bind'];
+      
+      if (!reservedWords.includes(methodName) && !methodName.startsWith('get') && !methodName.startsWith('set')) {
+        methods.push(methodName);
       }
     }
 
