@@ -8,12 +8,13 @@ describe('<%= serviceName %> Service', () => {
   let service: <%= serviceName %>;
 
   const mockProviders = [
-     {
-    provide: <%= serviceName %>,
-    useValue: {
-   
+    {
+      provide: <%= serviceName %>,
+      useValue: {
+        <%= failingMethod %>: jest.fn().mockResolvedValue({ success: true })
+      },
     },
-  },
+    <%= mockProvidersArray %>
   ];
 
   beforeEach(async () => {
@@ -33,11 +34,11 @@ describe('<%= serviceName %> Service', () => {
 
   describe('Error Handling', () => {
     it('should throw an error if dependency fails', async () => {
-      (jest.spyOn(mockProviders[0].useValue as <%= serviceName %> , '<%= failingMethod %>')as jest.Mock).mockRejectedValue(
+      (jest.spyOn(mockProviders[0].useValue as unknown as <%= serviceName %>, '<%= failingMethod %>') as jest.Mock).mockRejectedValue(
         new HttpException('Dependency Error', HttpStatus.INTERNAL_SERVER_ERROR)
       );
 
-      await expect(service.<%= failingMethod %>()).rejects.toThrow(HttpException);
+      await expect(service.<%= failingMethod %>(<%= failingMethodParams %>)).rejects.toThrow(HttpException);
     });
   });
 });

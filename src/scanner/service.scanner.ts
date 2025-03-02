@@ -12,26 +12,28 @@ export function scanService() {
     const classMatch = content.match(classRegex);
     const className = classMatch ? classMatch[1] : file.split("/").pop()?.replace(".service.ts", "Service") || "UnknownService";
 
-
-    const methodRegex = /\b(?:async\s+)?(\w+)\s*\(/g;
+    const methodsRegex = /(?:public|private|protected)?\s+(?:async\s+)?(\w+)\s*\([^)]*\)\s*(?::\s*\w+)?\s*{/g;
     const methods: string[] = [];
-    let match: RegExpExecArray | null;
+    let methodMatch: RegExpExecArray | null;
 
-    while ((match = methodRegex.exec(content)) !== null) {
-      if (match[1] !== "constructor" && !match[1].startsWith("get") && !match[1].startsWith("set")) {
-        methods.push(match[1]);
+    while ((methodMatch = methodsRegex.exec(content)) !== null) {
+      if (methodMatch[1] !== "constructor" && !methodMatch[1].startsWith("get") && !methodMatch[1].startsWith("set")) {
+        methods.push(methodMatch[1]);
       }
     }
 
-    const dependencyRegex = /constructor\s*\(\s*([^)]+)\)/;
-    const dependencyMatch = content.match(dependencyRegex);
+    const dependencyRegex = /constructor\s*\([^)]*\)/;
+    const paramRegex = /(?:private|public|protected)?\s+(?:readonly)?\s+(\w+)\s*:\s*(\w+)/g;
+    const constructorMatch = content.match(dependencyRegex);
     let dependencies: string[] = [];
 
-    if (dependencyMatch) {
-      dependencies = dependencyMatch[1]
-        .split(",")
-        .map((dep) => dep.trim().split(":")[0].replace(/private|public|protected/, "").trim())
-        .filter((dep) => dep);
+    if (constructorMatch) {
+      const constructorStr = constructorMatch[0];
+      let paramMatch: RegExpExecArray | null;
+      
+      while ((paramMatch = paramRegex.exec(constructorStr)) !== null) {
+        dependencies.push(paramMatch[2]);
+      }
     }
 
     return {

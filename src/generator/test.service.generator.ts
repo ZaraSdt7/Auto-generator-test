@@ -11,42 +11,80 @@ export function generateTestsService() {
       'utf-8'
     );
 
-    const mockProviders = dependencies.map((dep) => `{
+    const mockProviders = dependencies.map((dep) => {
+      const mockMethod = methods.length ? methods[0] : 'execute';
+      return `{
       provide: ${dep},
       useValue: {
-        ${methods.length ? methods[0] : 'execute'}: jest.fn()
+        ${mockMethod}: jest.fn().mockResolvedValue({ success: true })
       }
-    }`);
+    }`;
+    });
+
+    const fixedFilePath = filePath.replace(/\\/g, '/').replace('.ts', '');
+    const testFilePathFull = path.join(process.cwd(), `${fixedFilePath}.spec.ts`);
+    const testFileDir = path.dirname(testFilePathFull);
+    const serviceFileDir = path.dirname(path.join(process.cwd(), filePath));
+    const relativePath = path.relative(testFileDir, serviceFileDir).replace(/\\/g, '/');
+    
+    const servicePath = relativePath ? 
+      `${relativePath}/${path.basename(fixedFilePath)}` : 
+      `./${path.basename(fixedFilePath)}`;
+    
+    const dependencyPath = relativePath || './';
 
     const dependencyImports = dependencies
-      .map((dep) => `import { ${dep} } from '<%= dependencyPath %>';`)
+      .map((dep) => `import { ${dep} } from '${dependencyPath}';`)
       .join('\n');
 
     const testCases = methods
       .map(
-        (method) => `
+        (method) => {
+          let params = '{}';
+          if (method.includes('find') || method.includes('get') || method.includes('read')) {
+            params = '{ id: "test-id" }';
+          } else if (method.includes('create') || method.includes('update') || method.includes('save')) {
+            params = '{ name: "test", value: "data" }';
+          } else if (method.includes('delete') || method.includes('remove')) {
+            params = '"test-id"';
+          } else if (method.includes('analyze') || method.includes('process')) {
+            params = '"data", 1000, 2000';
+          }
+          
+          return `
   it('should call ${method}()', async () => {
-    const result = await service.${method}();
+    const result = await service.${method}(${params});
     expect(result).toBeDefined();
-  });`
+  });`;
+        }
       )
       .join('\n');
 
     const failingMethod = methods.length ? methods[0] : 'execute';
-
-    const fixedFilePath = filePath.replace(/\\/g, '/').replace('.ts', '');
+    
+    let failingMethodParams = '{}';
+    if (failingMethod.includes('find') || failingMethod.includes('get') || failingMethod.includes('read')) {
+      failingMethodParams = '{ id: "test-id" }';
+    } else if (failingMethod.includes('create') || failingMethod.includes('update') || failingMethod.includes('save')) {
+      failingMethodParams = '{ name: "test", value: "data" }';
+    } else if (failingMethod.includes('delete') || failingMethod.includes('remove')) {
+      failingMethodParams = '"test-id"';
+    } else if (failingMethod.includes('analyze') || failingMethod.includes('process')) {
+      failingMethodParams = '"data", 1000, 2000';
+    }
 
     const testFile = templatePath
       .replace(/<%= serviceName %>/g, className)
-      .replace(/<%= servicePath %>/g, fixedFilePath)
+      .replace(/<%= servicePath %>/g, servicePath)
       .replace(/<%= dependencyImports %>/g, dependencyImports)
       .replace(/<%= mockProvidersArray %>/g, mockProviders.join(',\n    '))
       .replace(/<%= testCases %>/g, testCases)
-      .replace(/<%= failingMethod %>/g, failingMethod);
+      .replace(/<%= failingMethod %>/g, failingMethod)
+      .replace(/<%= failingMethodParams %>/g, failingMethodParams)
+      .replace(/<%= dependencyPath %>/g, dependencyPath);
 
-    const testFilePath = path.join(process.cwd(), `${fixedFilePath}.spec.ts`);
-    writeFileSync(testFilePath, testFile);
-    console.log(`✅ Service test generated: ${testFilePath}`);
+    writeFileSync(testFilePathFull, testFile);
+    console.log(`✅ Service test generated: ${testFilePathFull}`);
   });
 }
 
