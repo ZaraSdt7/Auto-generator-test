@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { <%= className %> } from '../src/modules/<%= moduleName %>/<%= fileName %>';
-import { <%= serviceName %> } from '../src/modules/<%= moduleName %>/<%= serviceFileName %>';
+import { <%= className %> } from '<%= importPath %>/<%= fileName %>';
+import { <%= serviceName %> } from '<%= importPath %>/<%= serviceFileName %>';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Mock Providers
